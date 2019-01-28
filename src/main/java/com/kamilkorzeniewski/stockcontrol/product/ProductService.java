@@ -1,5 +1,6 @@
 package com.kamilkorzeniewski.stockcontrol.product;
 
+import com.google.common.collect.Lists;
 import com.kamilkorzeniewski.stockcontrol.invoice.InvoiceLoader;
 import com.kamilkorzeniewski.stockcontrol.invoice.InvoiceLoaderParameter;
 import com.querydsl.core.types.Predicate;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+
 
 @Service
 public class ProductService {
@@ -30,8 +32,8 @@ public class ProductService {
         productRepository.saveAll(products);
     }
 
-    public List<Product> findAllByPredicate(Predicate predicate){
-        productRepository.findAll(predicate);
+    public List<QProduct> findAllByPredicate(Predicate predicate){
+         return Lists.newArrayList(productRepository.findAll(predicate));
     }
 
 }

@@ -1,5 +1,8 @@
 package com.kamilkorzeniewski.stockcontrol.product;
 
+import com.querydsl.core.types.Predicate;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -9,6 +12,7 @@ public interface ProductRepository extends CrudRepository, QuerydslPredicateExec
 
     @Override
     default void customize(QuerydslBindings bindings, QProduct root) {
-        ProductCustomBindings.bind(bindings, root);
+        ProductCutomBindings.bind(bindings, root);
     }
+
 }

@@ -15,7 +15,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/product")
-    public List<Product> getProductsQueryDsl(@QuerydslPredicate(root = Product.class) Predicate productPredicate){
+    public List<QProduct> getProductsQueryDsl(@QuerydslPredicate(root = Product.class) Predicate productPredicate){
         return productService.findAllByPredicate(productPredicate);
     }
 }

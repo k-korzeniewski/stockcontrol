@@ -26,9 +26,9 @@ public class ProductService {
     public void loadProductsFromCsv(String path, Map<Integer, String> fieldsName, int rowOffset) {
         InvoiceLoaderParameter csvIlp = new InvoiceLoaderParameter();
         csvIlp.put("path", path);
-        csvIlp.put("field_naes", fieldsName);
+        csvIlp.put("field_names", fieldsName);
         csvIlp.put("row_offset", rowOffset);
-        List<?> products = invoiceCsvLoader.load(csvIlp); // Can only return list with product so not need to cast.
+        List<Product> products = (List<Product>) invoiceCsvLoader.load(csvIlp);
         productRepository.saveAll(products);
     }
 

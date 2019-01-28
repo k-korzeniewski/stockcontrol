@@ -3,6 +3,8 @@ package com.kamilkorzeniewski.stockcontrol;
 import com.kamilkorzeniewski.stockcontrol.invoice.InvoiceProductCsvLoader;
 import com.kamilkorzeniewski.stockcontrol.invoice.InvoiceLoaderParameter;
 import com.kamilkorzeniewski.stockcontrol.product.Product;
+import com.kamilkorzeniewski.stockcontrol.product.ProductRepository;
+import com.kamilkorzeniewski.stockcontrol.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -23,6 +25,8 @@ public class StockcontrolApplication implements ApplicationRunner {
     @Autowired
     InvoiceProductCsvLoader invoiceProductCsvLoader;
 
+    @Autowired
+    private ProductService productService;
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
@@ -32,14 +36,9 @@ public class StockcontrolApplication implements ApplicationRunner {
         fields.put(2,"price");
         fields.put(4,"quantity");
 
-        InvoiceLoaderParameter invoiceLoaderParameter = new InvoiceLoaderParameter();
-        invoiceLoaderParameter.put("path","/Users/kamilkorzeniewski/csvfile.csv");
-        invoiceLoaderParameter.put("field_names",fields);
-        invoiceLoaderParameter.put("row_offset",1);
 
+        productService.loadProductsFromCsv("/Users/kamilkorzeniewski/csvfile.csv",fields,1);
 
-       List<Product> products = invoiceProductCsvLoader.load(invoiceLoaderParameter);
-       products.stream().forEach(Product::toString);
 
     }
 }

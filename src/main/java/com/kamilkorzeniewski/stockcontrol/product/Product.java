@@ -1,5 +1,6 @@
 package com.kamilkorzeniewski.stockcontrol.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.querydsl.core.annotations.PropertyType;
 import com.querydsl.core.annotations.QueryType;
 
@@ -12,26 +13,13 @@ import javax.validation.constraints.NotNull;
 public class Product {
 
     private Long id;
-
     private String name;
-
     private int quantity;
-
     private String code;
-
     private float price;
-
-    @Transient
-    @QueryType(PropertyType.SIMPLE)
     private float priceFrom;
-    @QueryType(PropertyType.SIMPLE)
-    @Transient
     private float priceTo;
-    @QueryType(PropertyType.SIMPLE)
-    @Transient
     private int quantityFrom;
-    @QueryType(PropertyType.SIMPLE)
-    @Transient
     private int quantityTo;
 
     public Product() {
@@ -97,6 +85,9 @@ public class Product {
                 '}';
     }
 
+    @Transient
+    @QueryType(PropertyType.NUMERIC)
+    @JsonIgnore
     public float getPriceFrom() {
         return priceFrom;
     }
@@ -105,6 +96,9 @@ public class Product {
         this.priceFrom = priceFrom;
     }
 
+    @Transient
+    @QueryType(PropertyType.NUMERIC)
+    @JsonIgnore
     public float getPriceTo() {
         return priceTo;
     }
@@ -113,6 +107,9 @@ public class Product {
         this.priceTo = priceTo;
     }
 
+    @Transient
+    @QueryType(PropertyType.NUMERIC)
+    @JsonIgnore
     public int getQuantityFrom() {
         return quantityFrom;
     }
@@ -121,6 +118,9 @@ public class Product {
         this.quantityFrom = quantityFrom;
     }
 
+    @Transient
+    @QueryType(PropertyType.NUMERIC)
+    @JsonIgnore
     public int getQuantityTo() {
         return quantityTo;
     }

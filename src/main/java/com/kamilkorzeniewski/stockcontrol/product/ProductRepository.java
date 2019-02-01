@@ -13,5 +13,6 @@ public interface ProductRepository extends CrudRepository<Product,Long>, Queryds
     default void customize(QuerydslBindings bindings, QProduct root) {
         ProductCustomBindings.bind(bindings,root);
     }
+    
 
 }

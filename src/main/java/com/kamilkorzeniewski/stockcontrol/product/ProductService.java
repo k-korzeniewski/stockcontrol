@@ -36,4 +36,8 @@ public class ProductService {
          return Lists.newArrayList(productRepository.findAll(predicate));
     }
 
+    public void saveProduct(Product product){
+        productRepository.save(product);
+    }
+
 }

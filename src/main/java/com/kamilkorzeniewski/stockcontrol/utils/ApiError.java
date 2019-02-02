@@ -9,7 +9,6 @@ public class ApiError {
     private String message;
     private String debugMessage;
     private LocalDateTime timeStamp;
-    private Throwable exception;
 
     private ApiError() {
         timeStamp = LocalDateTime.now();
@@ -31,7 +30,6 @@ public class ApiError {
         this.httpStatus = httpStatus;
         this.message = message;
         this.debugMessage = exception.getLocalizedMessage();
-        this.exception = exception;
     }
 
     public HttpStatus getHttpStatus() {

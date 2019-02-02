@@ -11,26 +11,19 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-/**
- * This class read csv file and assign columns to field in class T by field name
- *
- * @param <T>
- */
+
 public class CsvReader<T> {
 
     private static final char DEFAULT_SEPARATOR = ',';
     private static final Logger logger = LoggerFactory.getLogger(CsvReader.class);
-    private Class clazz;
+    private Class<T> clazz;
     private Map<Integer, String> fields = new HashMap<>(); // Fields names and corresponding column numbers
 
-    public CsvReader(Class clazz) {
+    public CsvReader(Class<T> clazz) {
         this.clazz = clazz;
     }
 
-    /**
-     * @param rowOffset define from with row start reading. Must be greater or equal 0
-     * @param path      define path to csv file
-     **/
+
 
     public List<T> read(String path, int rowOffset) {
 
@@ -52,7 +45,7 @@ public class CsvReader<T> {
             }
 
             while ((line = br.readLine()) != null) {
-                T object = (T) clazz.getDeclaredConstructor().newInstance();
+                T object =  clazz.getDeclaredConstructor().newInstance();
 
                 String[] lines = line.split(Character.toString(DEFAULT_SEPARATOR));
                 for (int i = 0; i < lines.length; i++) {
@@ -62,7 +55,6 @@ public class CsvReader<T> {
                 }
                 resultList.add(object);
 
-                // Debug logging
                 StringBuilder sb = new StringBuilder();
                 sb.append("New object loaded from CSV ( ").append(path).append(")").append("->").append(object.toString());
                 logger.info(sb.toString());
@@ -85,16 +77,6 @@ public class CsvReader<T> {
         return resultList;
     }
 
-    /**
-     * Assign column number to fild name in class T
-     *
-     * @param classFieldName
-     * @param columnNumber
-     */
-    public void addFieldDeclaration(String classFieldName, int columnNumber) {
-        fields.put(columnNumber, classFieldName);
-
-    }
 
     public void addFieldsDeclarations(Map<Integer,String> fieldMaps){
         fields.putAll(fieldMaps);

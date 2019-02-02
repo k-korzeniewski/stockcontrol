@@ -1,8 +1,6 @@
 package com.kamilkorzeniewski.stockcontrol.product;
 
 import com.querydsl.core.types.Predicate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.validation.SmartValidator;
@@ -17,7 +15,6 @@ import java.util.List;
 @RestController("/product")
 public class ProductController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
     @Autowired
     SmartValidator smartValidator;
@@ -30,7 +27,7 @@ public class ProductController {
         return productService.findAllByPredicate(productPredicate);
     }
 
-    @PutMapping()
+    @PutMapping
     public void putProducts(@RequestBody @Valid Product product) {
         productService.saveProduct(product);
     }

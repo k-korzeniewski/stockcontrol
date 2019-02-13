@@ -56,7 +56,7 @@ public class Product {
     public int quantityTo;
     //
 
-    Product() {
+    public Product() {
     }
 
     private Product(String name, int quantity, String code, float price) {

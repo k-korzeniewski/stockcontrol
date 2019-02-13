@@ -14,27 +14,18 @@ public class ApiError {
         timeStamp = LocalDateTime.now();
     }
 
-    public ApiError(HttpStatus httpStatus) {
-        this();
-        this.httpStatus = httpStatus;
-    }
 
-    public ApiError(HttpStatus httpStatus, String message) {
-        this();
-        this.httpStatus = httpStatus;
-        this.message = message;
-    }
-
-    public ApiError(HttpStatus httpStatus, String message, Throwable exception) {
+    ApiError(HttpStatus httpStatus, String message, Throwable exception) {
         this();
         this.httpStatus = httpStatus;
         this.message = message;
         this.debugMessage = exception.getLocalizedMessage();
     }
 
-    public HttpStatus getHttpStatus() {
+     HttpStatus getHttpStatus() {
         return httpStatus;
     }
+
 
     public String getMessage() {
         return message;

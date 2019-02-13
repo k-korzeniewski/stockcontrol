@@ -12,11 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootApplication
-@ComponentScan(basePackages="com.kamilkorzeniewski.stockcontrol")
+@ComponentScan(basePackages = "com.kamilkorzeniewski.stockcontrol")
 public class StockcontrolApplication implements ApplicationRunner {
 
     @Autowired
     private ProductService productService;
+
 
     public static void main(String[] args) {
         SpringApplication.run(StockcontrolApplication.class, args);
@@ -33,7 +34,6 @@ public class StockcontrolApplication implements ApplicationRunner {
 
 
         productService.loadProductsFromCsv("/Users/kamilkorzeniewski/csvfile.csv", fields, 1);
-
 
     }
 }

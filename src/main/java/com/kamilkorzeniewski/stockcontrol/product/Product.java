@@ -12,68 +12,74 @@ import javax.validation.constraints.NotNull;
 @Table(name = "products")
 public class Product {
 
-    private Long id;
-    private String name;
-    private int quantity;
-    private String code;
-    private float price;
-    private float priceFrom;
-    private float priceTo;
-    private int quantityFrom;
-    private int quantityTo;
-
-    public Product() {
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false)
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
+    public Long id;
 
     @NotNull
     @Column(name = "product_name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String name;
 
     @NotNull
     @Min(value = 0)
     @Column(name = "product_quantity")
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+    public int quantity;
 
     @Column(name = "product_code")
-    public String getCode() {
-        return code;
+    public String code;
+
+    @Column(name = "product_price")
+    @Min(value = 0)
+    @NotNull
+    public float price;
+
+    // below fields are for query filtering
+    @Transient
+    @QueryType(PropertyType.NUMERIC)
+    @JsonIgnore
+    public float priceFrom;
+
+    @Transient
+    @QueryType(PropertyType.NUMERIC)
+    @JsonIgnore
+    public float priceTo;
+
+    @Transient
+    @QueryType(PropertyType.NUMERIC)
+    @JsonIgnore
+    public int quantityFrom;
+
+    @Transient
+    @QueryType(PropertyType.NUMERIC)
+    @JsonIgnore
+    public int quantityTo;
+    //
+
+    Product() {
     }
 
-    public void setCode(String code) {
+    private Product(String name, int quantity, String code, float price) {
+        this.name = name;
+        this.quantity = quantity;
         this.code = code;
+        this.price = price;
     }
 
+    private Product(Long id, String name, int quantity, String code, float price){
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.code = code;
+        this.price = price;
+    }
+    Product productWith(String name){
+        return new Product(name,this.quantity,this.code,this.price);
+    }
+
+    Product productWith(Product product){
+        return new Product(this.id,product.name,product.quantity,product.code,product.price);
+    }
     @Override
     public String toString() {
         return "Product{" +
@@ -85,47 +91,6 @@ public class Product {
                 '}';
     }
 
-    @Transient
-    @QueryType(PropertyType.NUMERIC)
-    @JsonIgnore
-    public float getPriceFrom() {
-        return priceFrom;
-    }
 
-    public void setPriceFrom(float priceFrom) {
-        this.priceFrom = priceFrom;
-    }
 
-    @Transient
-    @QueryType(PropertyType.NUMERIC)
-    @JsonIgnore
-    public float getPriceTo() {
-        return priceTo;
-    }
-
-    public void setPriceTo(float priceTo) {
-        this.priceTo = priceTo;
-    }
-
-    @Transient
-    @QueryType(PropertyType.NUMERIC)
-    @JsonIgnore
-    public int getQuantityFrom() {
-        return quantityFrom;
-    }
-
-    public void setQuantityFrom(int quantityFrom) {
-        this.quantityFrom = quantityFrom;
-    }
-
-    @Transient
-    @QueryType(PropertyType.NUMERIC)
-    @JsonIgnore
-    public int getQuantityTo() {
-        return quantityTo;
-    }
-
-    public void setQuantityTo(int quantityTo) {
-        this.quantityTo = quantityTo;
-    }
 }

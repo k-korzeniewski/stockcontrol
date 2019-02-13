@@ -7,9 +7,11 @@ import org.springframework.data.querydsl.binding.QuerydslBindings;
 import java.util.Collection;
 import java.util.Optional;
 
-public class ProductCustomBindings {
 
-    public static void bind(QuerydslBindings bindings, QProduct root) {
+// We are using querydsl to filter product requests.
+ class ProductCustomBindings {
+
+     static void bind(QuerydslBindings bindings, QProduct root) {
         bindings.bind(String.class).all((StringPath path, Collection<? extends String> values) -> {
             BooleanBuilder predicate = new BooleanBuilder();
             values.forEach(value -> {

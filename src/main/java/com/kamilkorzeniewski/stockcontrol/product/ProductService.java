@@ -8,16 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
 public class ProductService {
 
     @Autowired
-    @Qualifier("invoiceProductCsvLoader")
-    private InvoiceLoader invoiceCsvLoader;
+    @Qualifier("csvProductInvoiceLoader")
+    private InvoiceLoader<Product> invoiceCsvLoader;
 
     @Autowired
     private ProductRepository productRepository;
@@ -28,16 +31,34 @@ public class ProductService {
         csvIlp.put("path", path);
         csvIlp.put("field_names", fieldsName);
         csvIlp.put("row_offset", rowOffset);
-        List<Product> products = (List<Product>) invoiceCsvLoader.load(csvIlp);
-        productRepository.saveAll(products);
+        List<Product> products = invoiceCsvLoader.load(csvIlp);
+        productRepository.saveAll(preProcess(Stream.of(products)));
     }
 
-    public List<QProduct> findAllByPredicate(Predicate predicate){
-         return Lists.newArrayList(productRepository.findAll(predicate));
+    List<QProduct> findAllByPredicate(Predicate predicate) {
+        return Lists.newArrayList(productRepository.findAll(predicate));
     }
 
-    public void saveProduct(Product product){
+    void saveProduct(Product product) {
         productRepository.save(product);
     }
+
+    void updateOrCreate(Product product, Long id) {
+        Product p = productRepository.findById(id).orElseGet(Product::new);
+        productRepository.save(p.productWith(product));
+
+    }
+
+    // Removing dots from end of names
+    private List<Product> preProcess(Stream<List<Product>> productsStream) {
+        return productsStream.flatMap(Collection::stream).map(p -> {
+            if (p.name.endsWith(".")) {
+                String newName = p.name.substring(0, p.name.length() - 1);
+                return p.productWith(newName);
+            }
+            return p;
+        }).collect(Collectors.toList());
+    }
+
 
 }

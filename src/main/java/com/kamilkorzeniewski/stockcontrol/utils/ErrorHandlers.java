@@ -11,10 +11,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ErrorHandlers extends ResponseEntityExceptionHandler {
 
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST,"Wrong json request",ex);
         return new ResponseEntity<>(apiError,apiError.getHttpStatus());
     }
+
+
+
+
 }

@@ -2,6 +2,6 @@ package com.kamilkorzeniewski.stockcontrol.invoice;
 
 import java.util.List;
 
-public interface InvoiceLoader {
-    List<?> load(InvoiceLoaderParameter parameters);
+public interface InvoiceLoader<T> {
+    List<T> load(InvoiceLoaderParameter parameters);
 }

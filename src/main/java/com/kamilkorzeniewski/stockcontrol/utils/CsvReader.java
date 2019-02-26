@@ -35,7 +35,7 @@ public class CsvReader<T> {
 
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
-            for (int i = rowOffset; i >= 0; i--) {
+            for (int i = rowOffset; i > 0; i--) {
                 br.readLine(); // Skip lines before row_offset
             }
 
@@ -88,6 +88,13 @@ public class CsvReader<T> {
             if (opt_field.getType().equals(Float.TYPE)) {
                 opt_field.set(target, Float.valueOf((String) value));
             }
+            if(opt_field.getType().equals(Long.TYPE)){
+                opt_field.set(target,Long.valueOf((String) value));
+            }
+            if(opt_field.getType().equals(Boolean.TYPE)){
+                opt_field.set(target,Boolean.valueOf((String) value));
+            }
+
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

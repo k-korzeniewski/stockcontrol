@@ -7,6 +7,7 @@ import com.querydsl.core.annotations.QueryType;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 @Table(name = "products")
@@ -54,32 +55,34 @@ public class Product {
     @QueryType(PropertyType.NUMERIC)
     @JsonIgnore
     public int quantityTo;
-    //
+
 
     public Product() {
     }
 
-    private Product(String name, int quantity, String code, float price) {
+    Product(String name, int quantity, String code, float price) {
         this.name = name;
         this.quantity = quantity;
         this.code = code;
         this.price = price;
     }
 
-    private Product(Long id, String name, int quantity, String code, float price){
+    private Product(Long id, String name, int quantity, String code, float price) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.code = code;
         this.price = price;
     }
-    Product productWith(String name){
-        return new Product(name,this.quantity,this.code,this.price);
+
+    Product productWith(String name) {
+        return new Product(name, this.quantity, this.code, this.price);
     }
 
-    Product productWith(Product product){
-        return new Product(this.id,product.name,product.quantity,product.code,product.price);
+    Product productWith(Product product) {
+        return new Product(this.id, product.name, product.quantity, product.code, product.price);
     }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -91,6 +94,21 @@ public class Product {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return quantity == product.quantity &&
+                Float.compare(product.price, price) == 0 &&
+                Objects.equals(id, product.id) &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(code, product.code);
+    }
 
+    @Override
+    public int hashCode() {
 
+        return Objects.hash(id, name, quantity, code, price);
+    }
 }

@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 
-// We are using querydsl to filter product requests.
  class ProductCustomBindings {
 
      static void bind(QuerydslBindings bindings, QProduct root) {

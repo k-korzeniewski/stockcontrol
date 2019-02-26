@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/product")
@@ -17,21 +18,23 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public List<QProduct> getProductsQueryDsl(@QuerydslPredicate(root = Product.class) Predicate productPredicate) {
+    public List<Product> getProductsQueryDsl(@QuerydslPredicate(root = Product.class) Predicate productPredicate) {
         return productService.findAllByPredicate(productPredicate);
     }
 
     @PostMapping
-    public void postProduct(@RequestBody @Valid Product product) {
-        productService.saveProduct(product);
+    public Product postProduct(@RequestBody @Valid Product product) {
+        return productService.saveProduct(product);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/id/{id}")
     public void putProduct(@RequestBody @Valid Product product,@PathVariable Long id){
         productService.updateOrCreate(product,id);
     }
 
-
-
+    @PostMapping("/predicate/name")
+    public Map<Product,List<Product>> predicateProductsByName(@Valid @RequestBody List<Product> products){
+        return productService.predicateProductsByName(products);
+    }
 
 }

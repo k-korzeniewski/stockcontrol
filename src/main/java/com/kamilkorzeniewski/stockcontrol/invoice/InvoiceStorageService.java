@@ -1,6 +1,6 @@
 package com.kamilkorzeniewski.stockcontrol.invoice;
 
-import com.kamilkorzeniewski.stockcontrol.exceptions.FileStorageException;
+import com.kamilkorzeniewski.stockcontrol.exception.FileStorageException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +22,7 @@ public class InvoiceStorageService {
         try {
             Files.createDirectories(this.fileStoragePath);
         } catch (IOException ex) {
-            throw new FileStorageException("Cant create directories", ex);
+            throw new FileStorageException("Cant create directories");
         }
 
     }
@@ -33,7 +33,7 @@ public class InvoiceStorageService {
         try {
             Files.copy(file.getInputStream(),targetLoc,StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
-            throw new FileStorageException("Cant save file",ex);
+            throw new FileStorageException("Cant save file");
         }
 
         return targetLoc;

@@ -1,42 +1,44 @@
 package com.kamilkorzeniewski.stockcontrol.invoice;
 
-import com.kamilkorzeniewski.stockcontrol.invoice.csv.CsvProductInvoiceParameterDto;
+import com.kamilkorzeniewski.stockcontrol.invoice.csv.CsvInvoiceParameter;
+import com.kamilkorzeniewski.stockcontrol.invoice.csv.CsvProductInvoiceLoader;
 import com.kamilkorzeniewski.stockcontrol.product.Product;
-import com.kamilkorzeniewski.stockcontrol.product.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/invoice")
 public class InvoiceController {
 
-    @Autowired
-    private ProductService productService;
-
-    @Autowired
     private InvoiceStorageService invoiceStorageService;
+    private CsvProductInvoiceLoader productInvoiceLoader;
 
-    @Autowired
-    @Qualifier("csvProductInvoiceLoader")
-    private InvoiceLoader<Product> productInvoiceLoader;
+    public InvoiceController(InvoiceStorageService invoiceStorageService,
+                             @Qualifier("csvProductInvoiceLoader") CsvProductInvoiceLoader productInvoiceLoader) {
+        this.invoiceStorageService = invoiceStorageService;
+        this.productInvoiceLoader = productInvoiceLoader;
 
-    @PostMapping("/csv/product")
-    public List<Product> loadCsvProductInvoice(@RequestBody MultipartFile file, @Valid @RequestBody CsvProductInvoiceParameterDto dto) {
-        Path path = invoiceStorageService.storeFile(file);
-        InvoiceLoaderParameter invoiceLoaderParameter = dto.fromDto(path);
-        Supplier<List<Product>> loadFromCsvSupplier = () -> productInvoiceLoader.load(invoiceLoaderParameter);
-        return productService.loadProductsFrom(loadFromCsvSupplier);
+    }
 
+    @PostMapping(path = "/csv", consumes = {"multipart/form-data"}, produces = "application/json")
+    ResponseEntity<Map<String, String>> saveCsvFile(@RequestPart("file") MultipartFile file) { // Save csv file with generated name and return path to file.
+        Path filePath = invoiceStorageService.storeFile(file);
+        Map<String, String> response = Collections.singletonMap("path", filePath.toString());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/csv", produces = "application/json")
+    ResponseEntity<List<Product>> loadProductsFromCsvFile(@RequestBody CsvInvoiceParameter invoiceParameter) {
+        List<Product> products = productInvoiceLoader.load(invoiceParameter);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
 }

@@ -1,13 +1,12 @@
 package com.kamilkorzeniewski.stockcontrol.product;
 
-import com.kamilkorzeniewski.stockcontrol.invoice.InvoiceLoader;
-import com.kamilkorzeniewski.stockcontrol.invoice.InvoiceLoaderParameter;
+import com.kamilkorzeniewski.stockcontrol.invoice.csv.CsvInvoiceParameter;
+import com.kamilkorzeniewski.stockcontrol.invoice.csv.CsvProductInvoiceLoader;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -28,35 +27,30 @@ public class ProductServiceTest {
     private ProductService productService;
 
     @Autowired
-    @Qualifier("csvProductInvoiceLoader")
-    private InvoiceLoader<Product> invoiceCsvLoader;
+    private CsvProductInvoiceLoader invoiceLoader;
 
-    ///////////////////////////////////////////////////////////////////////
-    private static InvoiceLoaderParameter csvTestInvoiceLoaderParameter() {
+    private static CsvInvoiceParameter csvTestInvoiceLoaderParameter() {
         String csvFilePath = new File("src/test/resources/csvfile.csv").getAbsolutePath();
-
+        final int rowOffset = 1;
         Map<Integer, String> fieldNames = new HashMap<>();
         fieldNames.put(0, "name");
         fieldNames.put(1, "code");
         fieldNames.put(2, "quantity");
         fieldNames.put(3, "price");
+        CsvInvoiceParameter parameter = new CsvInvoiceParameter(csvFilePath, rowOffset, fieldNames);
 
-        InvoiceLoaderParameter csvIlp = new InvoiceLoaderParameter();
-        csvIlp.put("path", csvFilePath);
-        csvIlp.put("field_names", fieldNames);
-        csvIlp.put("row_offset", 1);
-        return csvIlp;
+        return parameter;
     }
 
     @Before
     public void setUp() {
-        Supplier<List<Product>> productSupplier = () -> invoiceCsvLoader.load(csvTestInvoiceLoaderParameter());
+        Supplier<List<Product>> productSupplier = () -> invoiceLoader.load(csvTestInvoiceLoaderParameter());
         productService.loadProductsFrom(productSupplier).forEach(productService::saveProduct);
     }
 
     @Test
     public void loadProductsFrom_then_ok() {
-        Supplier<List<Product>> productSupplier = () -> invoiceCsvLoader.load(csvTestInvoiceLoaderParameter());
+        Supplier<List<Product>> productSupplier = () -> invoiceLoader.load(csvTestInvoiceLoaderParameter());
         List<Product> products = productService.loadProductsFrom(productSupplier);
         List<Product> validProducts = List.of(new Product("P1", 1, "KT1", 24.89f),
                 new Product("P2", 33, "KT2", 12.5f));
@@ -66,7 +60,7 @@ public class ProductServiceTest {
 
     @Test
     public void predicate_products_then_ok() {
-        Supplier<List<Product>> productSupplier = () -> invoiceCsvLoader.load(csvTestInvoiceLoaderParameter());
+        Supplier<List<Product>> productSupplier = () -> invoiceLoader.load(csvTestInvoiceLoaderParameter());
         List<Product> loadedProducts = productService.loadProductsFrom(productSupplier);
         Map<Product, List<Product>> predicates = productService.predicateProductsByName(loadedProducts);
         loadedProducts.forEach(product -> {

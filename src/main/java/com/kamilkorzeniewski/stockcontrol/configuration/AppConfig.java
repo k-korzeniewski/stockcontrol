@@ -13,7 +13,9 @@ import org.springframework.context.annotation.Configuration;
 })
 public class AppConfig {
     @Bean(name = "productCsvReaderBean")
-    public CsvReader<Product> productCsvReader(){
+    public CsvReader<Product> productCsvReader() {
         return new CsvReader<>(Product.class);
     }
+
+
 }

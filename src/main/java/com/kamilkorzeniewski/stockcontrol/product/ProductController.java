@@ -14,8 +14,12 @@ import java.util.Map;
 public class ProductController {
 
 
-    @Autowired
     private ProductService productService;
+
+    @Autowired
+    public ProductController(ProductService productService){
+        this.productService = productService;
+    }
 
     @GetMapping
     public List<Product> getProductsQueryDsl(@QuerydslPredicate(root = Product.class) Predicate productPredicate) {

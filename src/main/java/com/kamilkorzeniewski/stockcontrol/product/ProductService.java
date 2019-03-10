@@ -20,7 +20,7 @@ public class ProductService {
     private ProductRepository productRepository;
 
 
-    public List<Product> loadProductsFrom(Supplier<List<Product>> productSupplier) {
+     List<Product> loadProductsFrom(Supplier<List<Product>> productSupplier) {
         List<Product> products = productSupplier.get().stream().map(this::removeEndDots).collect(Collectors.toList());
         return products;
     }

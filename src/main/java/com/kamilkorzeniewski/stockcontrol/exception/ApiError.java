@@ -1,5 +1,7 @@
-package com.kamilkorzeniewski.stockcontrol.utils;
+package com.kamilkorzeniewski.stockcontrol.exception;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
@@ -7,7 +9,7 @@ import java.time.LocalDateTime;
 public class ApiError {
     private HttpStatus httpStatus;
     private String message;
-    private String debugMessage;
+    private String extendedMessage;
     private LocalDateTime timeStamp;
 
     private ApiError() {
@@ -15,26 +17,27 @@ public class ApiError {
     }
 
 
-    ApiError(HttpStatus httpStatus, String message, Throwable exception) {
+     ApiError(HttpStatus httpStatus, String message, Throwable exception) {
         this();
         this.httpStatus = httpStatus;
         this.message = message;
-        this.debugMessage = exception.getLocalizedMessage();
+        this.extendedMessage = exception.getCause().getMessage();
     }
 
+    @JsonIgnore
      HttpStatus getHttpStatus() {
         return httpStatus;
     }
 
-
+    @JsonProperty("message")
     public String getMessage() {
         return message;
     }
-
-    public String getDebugMessage() {
-        return debugMessage;
+    @JsonProperty("extendedMessage")
+    public String getExtendedMessage() {
+        return extendedMessage;
     }
-
+    @JsonProperty("timeStamp")
     public LocalDateTime getTimeStamp() {
         return timeStamp;
     }

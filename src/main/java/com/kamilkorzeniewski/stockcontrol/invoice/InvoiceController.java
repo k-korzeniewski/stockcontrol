@@ -29,14 +29,14 @@ public class InvoiceController {
     }
 
     @PostMapping(path = "/csv", consumes = {"multipart/form-data"}, produces = "application/json")
-    ResponseEntity<Map<String, String>> saveCsvFile(@RequestPart("file") MultipartFile file) { // Save csv file with generated name and return path to file.
+    public ResponseEntity<Map<String, String>> saveCsvFile(@RequestPart("file") MultipartFile file) { // Save csv file with generated name and return path to file.
         Path filePath = invoiceStorageService.storeFile(file);
         Map<String, String> response = Collections.singletonMap("path", filePath.toString());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(path = "/csv", produces = "application/json")
-    ResponseEntity<List<Product>> loadProductsFromCsvFile(@RequestBody CsvInvoiceParameter invoiceParameter) {
+    public ResponseEntity<List<Product>> loadProductsFromCsvFile(@RequestBody CsvInvoiceParameter invoiceParameter) {
         List<Product> products = productInvoiceLoader.load(invoiceParameter);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }

@@ -16,24 +16,24 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false)
-    public Long id;
+    private Long id;
 
     @NotNull
     @Column(name = "product_name")
-    public String name;
+    String name;
 
     @NotNull
     @Min(value = 0)
     @Column(name = "product_quantity")
-    public int quantity;
+    private int quantity;
 
     @Column(name = "product_code")
-    public String code;
+    private String code;
 
     @Column(name = "product_price")
     @Min(value = 0)
     @NotNull
-    public float price;
+    private float price;
 
     // below fields are for query filtering
     @Transient
@@ -74,6 +74,7 @@ public class Product {
         this.code = code;
         this.price = price;
     }
+
 
     Product productWith(String name) {
         return new Product(name, this.quantity, this.code, this.price);

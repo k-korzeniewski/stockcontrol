@@ -77,7 +77,7 @@ public class CsvReader<T> {
         }
 
         try {
-            Field opt_field = Optional.ofNullable(field).orElseThrow(() -> new IllegalArgumentException("Field "+fieldName+" not founded"));
+            Field opt_field = Optional.ofNullable(field).orElseThrow(() -> new IllegalArgumentException("Field "+fieldName+" not found"));
             opt_field.setAccessible(true);
             if (opt_field.getType().equals(String.class)) {
                 opt_field.set(target, String.valueOf(value));

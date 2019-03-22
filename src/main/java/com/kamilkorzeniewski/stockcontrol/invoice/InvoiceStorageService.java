@@ -31,14 +31,15 @@ public class InvoiceStorageService {
 
     }
 
+    public String getFileStoragePath(String fileName){
+        return fileStoragePath.resolve(fileName).toString();
+    }
+
     Path storeFile(MultipartFile file) {
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        if (!Objects.equals(extension, "csv")) {
-            throw new FileStorageException("Wrong file extension ." + extension);
+        if (!Objects.equals(getExtension(file), "csv")) {
+            throw new FileStorageException("Wrong file extension ." + getExtension(file));
         }
-        String timestamp = LocalDateTime.now().withNano(0).toString();
-        String fileName = filePrefix+ "_" + timestamp + "." + extension;
-        Path targetLoc = fileStoragePath.resolve(fileName);
+        Path targetLoc = fileStoragePath.resolve(generateName(file));
         try {
             Files.copy(file.getInputStream(), targetLoc, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
@@ -47,7 +48,11 @@ public class InvoiceStorageService {
         return targetLoc.getFileName();
     }
 
-    public Path getFileStoragePath(String fileName){
-        return fileStoragePath.resolve(fileName);
+    private static String getExtension(MultipartFile file){return FilenameUtils.getExtension(file.getOriginalFilename());}
+
+    private String generateName(MultipartFile file){
+        String timestamp = LocalDateTime.now().withNano(0).toString();
+        String fileName = filePrefix+ "_" + timestamp + "." + getExtension(file);
+        return fileName;
     }
 }

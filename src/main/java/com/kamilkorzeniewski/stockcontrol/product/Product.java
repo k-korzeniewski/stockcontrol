@@ -30,17 +30,17 @@ public class Product {
     @Min(value = 0)
     @Column(name = "product_quantity")
     @JsonProperty("quantity")
-    private int quantity;
+    int quantity;
 
     @Column(name = "product_code")
     @JsonProperty("code")
-    private String code;
+    String code;
 
     @Column(name = "product_price")
     @Min(value = 0)
     @NotNull
     @JsonProperty("price")
-    private float price;
+    float price;
 
     @Transient
     @QueryType(PropertyType.NUMERIC)

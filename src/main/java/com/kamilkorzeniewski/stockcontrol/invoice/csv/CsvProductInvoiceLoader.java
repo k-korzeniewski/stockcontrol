@@ -25,7 +25,7 @@ public class CsvProductInvoiceLoader {
     }
     public List<Product> load(CsvInvoiceParameter parameter) {
         productCsvReader.addFieldsDeclarations(parameter.getFieldNames());
-        return productCsvReader.read(invoiceStorageService.getFileStoragePath(parameter.getPath()).toString(),
+        return productCsvReader.read(invoiceStorageService.getFileStoragePath(parameter.getPath()),
                                         parameter.getRowOffset());
     }
 

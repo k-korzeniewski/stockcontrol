@@ -3,6 +3,8 @@ package com.kamilkorzeniewski.stockcontrol.product;
 import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,7 +19,7 @@ public class ProductController {
     private ProductService productService;
 
     @Autowired
-    public ProductController(ProductService productService){
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
@@ -27,18 +29,28 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product postProduct(@RequestBody @Valid Product product) {
-        return productService.saveProduct(product);
+    public ResponseEntity<Product> postProduct(@RequestBody @Valid Product products) {
+        Product response = productService.saveProduct(products);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping("/id/{id}")
-    public void putProduct(@RequestBody @Valid Product product,@PathVariable Long id){
-        productService.updateOrCreate(product,id);
+    @PutMapping("/{id}")
+    public void putProduct(@RequestBody @Valid Product product, @PathVariable Long id) {
+        productService.updateOrCreate(product, id);
     }
 
-    @PostMapping("/predicate/name")
-    public Map<Product,List<Product>> predicateProductsByName(@Valid @RequestBody List<Product> products){
-        return productService.predicateProductsByName(products);
+    /*
+        Predicate existing products from list of products.
+        Return Map where key is product from list and value is list of predicates, for specific product.
+     */
+    @PostMapping("/predicate")
+    public Map<Product, List<Product>> predicateProducts(@Valid @RequestBody List<Product> products) {
+        return productService.predicateProducts(products);
+    }
+
+    @DeleteMapping
+    public void removeProduct(@PathVariable Long id) {
+        productService.removeProduct(id);
     }
 
 }

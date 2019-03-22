@@ -16,16 +16,18 @@ public class ApiError {
         timeStamp = LocalDateTime.now();
     }
 
-
-     ApiError(HttpStatus httpStatus, String message, Throwable exception) {
+    ApiError(HttpStatus httpStatus, String message){
         this();
         this.httpStatus = httpStatus;
         this.message = message;
-        this.extendedMessage = exception.getCause().getMessage();
+    }
+     public ApiError(HttpStatus httpStatus, String message, Throwable exception) {
+        this(httpStatus,message);
+        this.extendedMessage = exception.getLocalizedMessage();
     }
 
     @JsonIgnore
-     HttpStatus getHttpStatus() {
+     public HttpStatus getHttpStatus() {
         return httpStatus;
     }
 

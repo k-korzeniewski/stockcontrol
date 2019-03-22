@@ -2,6 +2,7 @@ package com.kamilkorzeniewski.stockcontrol.product;
 
 import com.kamilkorzeniewski.stockcontrol.invoice.csv.CsvInvoiceParameter;
 import com.kamilkorzeniewski.stockcontrol.invoice.csv.CsvProductInvoiceLoader;
+import com.kamilkorzeniewski.stockcontrol.reader.FieldMapping;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,9 +12,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -32,15 +34,21 @@ public class ProductServiceTest {
     private static CsvInvoiceParameter csvTestInvoiceLoaderParameter() {
         String csvFilePath = new File("src/test/resources/csvfile.csv").getAbsolutePath();
         final int rowOffset = 1;
-        Map<Integer, String> fieldNames = new HashMap<>();
-        fieldNames.put(0, "name");
-        fieldNames.put(1, "code");
-        fieldNames.put(2, "quantity");
-        fieldNames.put(3, "price");
-        CsvInvoiceParameter parameter = new CsvInvoiceParameter(csvFilePath, rowOffset, fieldNames);
+//        Map<Integer, String> fieldNames = new HashMap<>();
+//        fieldNames.put(0, "name");
+//        fieldNames.put(1, "code");
+//        fieldNames.put(2, "quantity");
+//        fieldNames.put(3, "price");
 
-        return parameter;
-    }
+        Set<FieldMapping> fieldMappingList = new HashSet<>();
+        FieldMapping nameFiled = new FieldMapping("name",0);
+        FieldMapping codeField = new FieldMapping("code",1);
+        FieldMapping quantityField = new FieldMapping("quantity", 2);
+        FieldMapping priceField = new FieldMapping("price",3);
+        fieldMappingList.addAll(Set.of(nameFiled,codeField,quantityField,priceField));
+
+        return new CsvInvoiceParameter(csvFilePath, rowOffset, fieldMappingList);
+        }
 
     @Before
     public void setUp() {
@@ -62,7 +70,7 @@ public class ProductServiceTest {
     public void predicate_products_then_ok() {
         Supplier<List<Product>> productSupplier = () -> invoiceLoader.load(csvTestInvoiceLoaderParameter());
         List<Product> loadedProducts = productService.loadProductsFrom(productSupplier);
-        Map<Product, List<Product>> predicates = productService.predicateProductsByName(loadedProducts);
+        Map<Product, List<Product>> predicates = productService.predicateProducts(loadedProducts);
         loadedProducts.forEach(product -> {
             List<String> predicateNames = predicates.get(product).stream().map(p -> p.name).collect(Collectors.toList());
             Assertions.assertThat(predicateNames).containsOnly(product.name);

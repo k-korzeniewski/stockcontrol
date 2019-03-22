@@ -1,6 +1,8 @@
 package com.kamilkorzeniewski.stockcontrol.product;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.querydsl.core.annotations.PropertyType;
 import com.querydsl.core.annotations.QueryType;
 
@@ -16,26 +18,30 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY, value = "id")
     private Long id;
 
     @NotNull
     @Column(name = "product_name")
+    @JsonProperty("name")
     String name;
 
     @NotNull
     @Min(value = 0)
     @Column(name = "product_quantity")
+    @JsonProperty("quantity")
     private int quantity;
 
     @Column(name = "product_code")
+    @JsonProperty("code")
     private String code;
 
     @Column(name = "product_price")
     @Min(value = 0)
     @NotNull
+    @JsonProperty("price")
     private float price;
 
-    // below fields are for query filtering
     @Transient
     @QueryType(PropertyType.NUMERIC)
     @JsonIgnore
@@ -109,7 +115,6 @@ public class Product {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, name, quantity, code, price);
     }
 }

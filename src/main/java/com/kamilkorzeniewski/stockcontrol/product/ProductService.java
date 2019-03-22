@@ -5,10 +5,7 @@ import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -16,16 +13,18 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
 
-    @Autowired
+
     private ProductRepository productRepository;
 
-
-     List<Product> loadProductsFrom(Supplier<List<Product>> productSupplier) {
-        List<Product> products = productSupplier.get().stream().map(this::removeEndDots).collect(Collectors.toList());
-        return products;
+    public ProductService(ProductRepository productRepository){
+        this.productRepository = productRepository;
     }
 
-    Map<Product, List<Product>> predicateProductsByName(List<Product> products) {
+    List<Product> loadProductsFrom(Supplier<List<Product>> productSupplier) {
+        return productSupplier.get().stream().map(this::removeEndDots).collect(Collectors.toList());
+    }
+
+    Map<Product, List<Product>> predicateProducts(List<Product> products) {
         Map<Product, List<Product>> productListMap = new HashMap<>();
         products.forEach(product -> {
             productListMap.computeIfAbsent(product, Lists::newArrayList);
@@ -47,12 +46,17 @@ public class ProductService {
                 () -> productRepository.save(product));
     }
 
+    void removeProduct(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Product with id " + id + " not exist"));
+        productRepository.delete(product);
+    }
 
     private List<Product> findProductsNameContains(Product product) {
         return Arrays.stream(product.name.split(" ")).map(nameElement -> {
             Predicate namePredicate = QProduct.product.name.containsIgnoreCase(nameElement);
             return productRepository.findAll(namePredicate);
-        }).map(Lists::newArrayList).flatMap(list -> list.stream()).collect(Collectors.toList());
+        }).map(Lists::newArrayList).flatMap(Collection::stream).collect(Collectors.toList());
 
     }
 
@@ -63,5 +67,6 @@ public class ProductService {
         }
         return product;
     }
+
 
 }

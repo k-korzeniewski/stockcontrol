@@ -1,13 +1,13 @@
 package com.kamilkorzeniewski.stockcontrol.invoice.csv;
 
+import com.kamilkorzeniewski.stockcontrol.invoice.InvoiceStorageService;
 import com.kamilkorzeniewski.stockcontrol.product.Product;
-import com.kamilkorzeniewski.stockcontrol.utils.CsvReader;
+import com.kamilkorzeniewski.stockcontrol.reader.CsvReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -15,20 +15,18 @@ import java.util.Map;
 public class CsvProductInvoiceLoader {
 
     private CsvReader<Product> productCsvReader;
+    private InvoiceStorageService invoiceStorageService;
 
     @Autowired
-    public CsvProductInvoiceLoader(@Qualifier("productCsvReaderBean") CsvReader<Product> productCsvReader) {
+    public CsvProductInvoiceLoader(@Qualifier("productCsvReaderBean") CsvReader<Product> productCsvReader,
+                                   InvoiceStorageService invoiceStorageService) {
         this.productCsvReader = productCsvReader;
+        this.invoiceStorageService = invoiceStorageService;
     }
-
     public List<Product> load(CsvInvoiceParameter parameter) {
-        String path = parameter.getPath();
-        Map<Integer, String> fieldNames = parameter.getFieldNames();
-        int rowOffset = parameter.getRowOffset();
-
-        productCsvReader.addFieldsDeclarations(fieldNames);
-        return productCsvReader.read(path, rowOffset);
-
+        productCsvReader.addFieldsDeclarations(parameter.getFieldNames());
+        return productCsvReader.read(invoiceStorageService.getFileStoragePath(parameter.getPath()).toString(),
+                                        parameter.getRowOffset());
     }
 
 }

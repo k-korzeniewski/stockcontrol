@@ -11,35 +11,43 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Service
 public class InvoiceStorageService {
 
     private final Path fileStoragePath;
+    private final String filePrefix;
 
     public InvoiceStorageService(InvoiceStorageProperties invoiceStorageProperties) {
         this.fileStoragePath = Paths.get(invoiceStorageProperties.getUploadDir()).toAbsolutePath().normalize();
+        this.filePrefix = invoiceStorageProperties.getFilePrefix();
 
         try {
             Files.createDirectories(this.fileStoragePath);
         } catch (IOException ex) {
-            throw new FileStorageException("Cant create directories",ex);
+            throw new FileStorageException("Can not create directories", ex);
         }
 
     }
 
     Path storeFile(MultipartFile file) {
-        String timestamp  = LocalDateTime.now().withNano(0).toString();
-        StringBuilder fileName = new StringBuilder();
-        fileName.append("invoice").append("_").append(timestamp).append(".")
-                                    .append(FilenameUtils.getExtension(file.getOriginalFilename()));
-        Path targetLoc = fileStoragePath.resolve(fileName.toString());
-        try {
-            Files.copy(file.getInputStream(),targetLoc,StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ex) {
-            throw new FileStorageException("Cant save file",ex);
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        if (!Objects.equals(extension, "csv")) {
+            throw new FileStorageException("Wrong file extension ." + extension);
         }
+        String timestamp = LocalDateTime.now().withNano(0).toString();
+        String fileName = filePrefix+ "_" + timestamp + "." + extension;
+        Path targetLoc = fileStoragePath.resolve(fileName);
+        try {
+            Files.copy(file.getInputStream(), targetLoc, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            throw new FileStorageException("Cant save file", ex);
+        }
+        return targetLoc.getFileName();
+    }
 
-        return targetLoc;
+    public Path getFileStoragePath(String fileName){
+        return fileStoragePath.resolve(fileName);
     }
 }

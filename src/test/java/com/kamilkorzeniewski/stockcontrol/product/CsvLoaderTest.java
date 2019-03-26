@@ -5,7 +5,6 @@ import com.kamilkorzeniewski.stockcontrol.invoice.csv.CsvInvoiceParameter;
 import com.kamilkorzeniewski.stockcontrol.invoice.csv.CsvProductInvoiceLoader;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -43,11 +43,19 @@ public class InvoiceStorageService {
         try {
             Files.copy(file.getInputStream(), targetLoc, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
-            throw new FileStorageException("Cant save file", ex);
+            throw new FileStorageException("Cant save file:"+file.getOriginalFilename(), ex);
         }
         return targetLoc.getFileName();
     }
 
+    void removeFromStorage(String fileName){
+        Path filePath = Paths.get(getFileStoragePath(fileName));
+        try {
+            Files.delete(filePath);
+        } catch (IOException e) {
+            throw new FileStorageException("Cant remove file (probably not exist) : "+fileName);
+        }
+    }
     private static String getExtension(MultipartFile file){return FilenameUtils.getExtension(file.getOriginalFilename());}
 
     private String generateName(MultipartFile file){

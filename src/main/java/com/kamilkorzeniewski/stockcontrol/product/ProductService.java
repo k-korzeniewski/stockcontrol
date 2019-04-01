@@ -33,6 +33,10 @@ public class ProductService {
         return productListMap;
     }
 
+    Product findProductById(Long id){
+        return productRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    }
+
     List<Product> findAllByPredicate(Predicate predicate) {
         return Lists.newArrayList(productRepository.findAll(predicate));
     }

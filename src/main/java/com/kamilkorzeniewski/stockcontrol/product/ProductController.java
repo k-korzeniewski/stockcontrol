@@ -28,6 +28,12 @@ public class ProductController {
         return productService.findAllByPredicate(productPredicate);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable Long id){
+        Product resposne = productService.findProductById(id);
+        return new ResponseEntity<>(resposne, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Product> postProduct(@RequestBody @Valid Product products) {
         Product response = productService.saveProduct(products);
@@ -48,7 +54,7 @@ public class ProductController {
         return productService.predicateProducts(products);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public void removeProduct(@PathVariable Long id) {
         productService.removeProduct(id);
     }

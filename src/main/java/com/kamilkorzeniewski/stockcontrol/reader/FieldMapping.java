@@ -10,8 +10,6 @@ public class FieldMapping {
     @JsonProperty("column")
     private int column;
 
-    //private FieldMapping(){} // private constructor for json serialization
-
     @JsonCreator
     public FieldMapping(@JsonProperty("name") String name,@JsonProperty("column") int column) {
         this.name = name;

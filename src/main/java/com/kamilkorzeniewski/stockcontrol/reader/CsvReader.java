@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.function.IntUnaryOperator;
+import java.util.stream.IntStream;
 
 
 public class CsvReader<T> {
@@ -32,6 +34,7 @@ public class CsvReader<T> {
 
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
+
             for (int i = rowOffset; i > 0; i--) {
                 br.readLine();                                                  // Skip lines before offset.
             }
@@ -51,18 +54,19 @@ public class CsvReader<T> {
         fields.addAll(fieldsMapping);
     }
 
+    /*
+        * Process line from input and convert to object T class.
+     */
     private T resolveLine(@NotNull String line) throws NoSuchMethodException, IllegalAccessException,
             InvocationTargetException, InstantiationException {
 
         T object = clazz.getDeclaredConstructor().newInstance();
         String[] columns = line.split(Character.toString(DEFAULT_SEPARATOR));
-        for (int i = 0; i < columns.length; i++) {
-            for (FieldMapping f : fields) {
-                if (f.containColumn(i)) {
-                    this.setFieldValue(f.getName(), columns[i], object);
-                }
-            }
-        }
+
+        IntStream.range(0,columns.length).forEach(i ->
+            fields.stream().filter(field -> field.containColumn(i))
+                    .forEach(field -> this.setFieldValue(field.getName(),columns[i],object))
+        );
         return object;
     }
 
@@ -101,5 +105,6 @@ public class CsvReader<T> {
 
 
     }
+
 
 }

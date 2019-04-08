@@ -2,6 +2,8 @@ package com.kamilkorzeniewski.stockcontrol.product;
 
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,10 +52,11 @@ public class ProductService {
                 () -> productRepository.save(product));
     }
 
-    void removeProduct(Long id) {
+    Product removeProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Product with id " + id + " not exist"));
         productRepository.delete(product);
+        return product;
     }
 
     private List<Product> findProductsNameContains(Product product) {

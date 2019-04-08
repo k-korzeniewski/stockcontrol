@@ -20,9 +20,9 @@ public class InvoiceStorageService {
     private final String filePrefix;
 
     public InvoiceStorageService(InvoiceStorageProperties invoiceStorageProperties) {
-        this.fileStoragePath = Paths.get(invoiceStorageProperties.getUploadDir()).toAbsolutePath().normalize();
+        String uploadDir = invoiceStorageProperties.getUploadDir();
+        this.fileStoragePath = Paths.get(uploadDir).toAbsolutePath().normalize();
         this.filePrefix = invoiceStorageProperties.getFilePrefix();
-
         try {
             Files.createDirectories(this.fileStoragePath);
         } catch (IOException ex) {

@@ -1,8 +1,6 @@
 package com.kamilkorzeniewski.stockcontrol.product;
 
-import com.kamilkorzeniewski.stockcontrol.invoice.InvoiceStorageService;
 import com.kamilkorzeniewski.stockcontrol.reader.FieldMapping;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.FileWriter;

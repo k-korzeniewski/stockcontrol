@@ -10,6 +10,6 @@
 - Maven
 
 ## TODO
-- [ ] Add token security for rest endpoints
+- [ ] Add token security for rest endpoints ( in progres )
 - [ ] Add yolo algorithm for detection products from image.
 - [ ] TESTS 

@@ -12,4 +12,4 @@
 ## TODO
 - [ ] Add token security for rest endpoints
 - [ ] Add yolo algorithm for detection products from image.
-### -[ ] TESTS
+- [ ] TESTS 

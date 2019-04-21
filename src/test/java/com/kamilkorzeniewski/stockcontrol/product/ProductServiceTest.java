@@ -5,7 +5,6 @@ import com.kamilkorzeniewski.stockcontrol.invoice.csv.CsvInvoiceParameter;
 import com.kamilkorzeniewski.stockcontrol.invoice.csv.CsvProductInvoiceLoader;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,9 @@ import java.util.stream.Collectors;
 @SpringBootTest
 @EnableConfigurationProperties
 public class ProductServiceTest {
+    private final List<Product> validTestProducts;
     @Value("${csv.test-file-path}")
     private String testFilePath;
-
-    private final List<Product> validTestProducts;
     @Autowired
     private ProductService productService;
     @Autowired
@@ -52,14 +50,14 @@ public class ProductServiceTest {
 
 
     @Test
-    public void whenLoadProductsFromFile_thenReturnProductsList(){
-        Supplier<List<Product>> productSupplier = ()-> invoiceLoader.load(prepareInvoiceLoaderParameter());
+    public void whenLoadProductsFromFile_thenReturnProductsList() {
+        Supplier<List<Product>> productSupplier = () -> invoiceLoader.load(prepareInvoiceLoaderParameter());
         List<Product> resultProducts = productService.loadProductsFrom(productSupplier);
         Assertions.assertThat(resultProducts).isEqualTo(validTestProducts);
     }
 
     @Test
-    public void whenPredicateProducts_thenReturnPredicateMap(){
+    public void whenPredicateProducts_thenReturnPredicateMap() {
         Supplier<List<Product>> productSupplier = () -> invoiceLoader.load(prepareInvoiceLoaderParameter());
         List<Product> loadedProducts = productService.loadProductsFrom(productSupplier);
 
@@ -70,7 +68,6 @@ public class ProductServiceTest {
             Assertions.assertThat(predicateNames).containsOnly(product.name);
         });
     }
-
 
 
 }

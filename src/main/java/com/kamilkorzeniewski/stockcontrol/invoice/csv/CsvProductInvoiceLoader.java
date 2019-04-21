@@ -23,10 +23,11 @@ public class CsvProductInvoiceLoader {
         this.productCsvReader = productCsvReader;
         this.invoiceStorageService = invoiceStorageService;
     }
+
     public List<Product> load(CsvInvoiceParameter parameter) {
         productCsvReader.addFieldsDeclarations(parameter.getFieldNames());
         return productCsvReader.read(invoiceStorageService.getFileStoragePath(parameter.getPath()),
-                                        parameter.getRowOffset());
+                parameter.getRowOffset());
     }
 
 }

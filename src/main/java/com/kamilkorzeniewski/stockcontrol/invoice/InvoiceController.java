@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.websocket.server.PathParam;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -39,8 +38,8 @@ public class InvoiceController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @DeleteMapping(path="/csv/{name}")
-    public ResponseEntity<String> removeFile(@PathVariable String name){
+    @DeleteMapping(path = "/csv/{name}")
+    public ResponseEntity<String> removeFile(@PathVariable String name) {
         invoiceStorageService.removeFromStorage(name);
         return new ResponseEntity<>(HttpStatus.OK);
     }

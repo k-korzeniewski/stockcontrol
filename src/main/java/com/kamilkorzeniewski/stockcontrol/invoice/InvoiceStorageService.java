@@ -31,7 +31,11 @@ public class InvoiceStorageService {
 
     }
 
-    public String getFileStoragePath(String fileName){
+    private static String getExtension(MultipartFile file) {
+        return FilenameUtils.getExtension(file.getOriginalFilename());
+    }
+
+    public String getFileStoragePath(String fileName) {
         return fileStoragePath.resolve(fileName).toString();
     }
 
@@ -43,24 +47,23 @@ public class InvoiceStorageService {
         try {
             Files.copy(file.getInputStream(), targetLoc, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
-            throw new FileStorageException("Cant save file:"+file.getOriginalFilename(), ex);
+            throw new FileStorageException("Cant save file:" + file.getOriginalFilename(), ex);
         }
         return targetLoc.getFileName();
     }
 
-    void removeFromStorage(String fileName){
+    void removeFromStorage(String fileName) {
         Path filePath = Paths.get(getFileStoragePath(fileName));
         try {
             Files.delete(filePath);
         } catch (IOException e) {
-            throw new FileStorageException("Cant remove file (probably not exist) : "+fileName);
+            throw new FileStorageException("Cant remove file (probably not exist) : " + fileName);
         }
     }
-    private static String getExtension(MultipartFile file){return FilenameUtils.getExtension(file.getOriginalFilename());}
 
-    private String generateName(MultipartFile file){
+    private String generateName(MultipartFile file) {
         String timestamp = LocalDateTime.now().withNano(0).toString();
-        String fileName = filePrefix+ "_" + timestamp + "." + getExtension(file);
+        String fileName = filePrefix + "_" + timestamp + "." + getExtension(file);
         return fileName;
     }
 }

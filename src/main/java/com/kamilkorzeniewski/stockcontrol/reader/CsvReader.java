@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
 
 
@@ -55,7 +54,7 @@ public class CsvReader<T> {
     }
 
     /*
-        * Process line from input and convert to object T class.
+     * Process line from input and convert to object T class.
      */
     private T resolveLine(@NotNull String line) throws NoSuchMethodException, IllegalAccessException,
             InvocationTargetException, InstantiationException {
@@ -63,9 +62,9 @@ public class CsvReader<T> {
         T object = clazz.getDeclaredConstructor().newInstance();
         String[] columns = line.split(Character.toString(DEFAULT_SEPARATOR));
 
-        IntStream.range(0,columns.length).forEach(i ->
-            fields.stream().filter(field -> field.containColumn(i))
-                    .forEach(field -> this.setFieldValue(field.getName(),columns[i],object))
+        IntStream.range(0, columns.length).forEach(i ->
+                fields.stream().filter(field -> field.containColumn(i))
+                        .forEach(field -> this.setFieldValue(field.getName(), columns[i], object))
         );
         return object;
     }

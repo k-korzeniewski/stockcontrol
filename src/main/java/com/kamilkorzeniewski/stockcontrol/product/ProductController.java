@@ -21,7 +21,7 @@ public class ProductController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductController.class);
 
-    private ProductService productService;
+    private final ProductService productService;
 
     @Autowired
     public ProductController(ProductService productService) {
@@ -30,28 +30,28 @@ public class ProductController {
 
     @GetMapping
     public List<Product> findProductsQueryDsl(@QuerydslPredicate(root = Product.class) Predicate productPredicate) {
-        
+
         return productService.findAllByPredicate(productPredicate);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> findProductById(@PathVariable Long id, HttpServletRequest request){
+    public ResponseEntity<Product> findProductById(@PathVariable Long id, HttpServletRequest request) {
         Product response = productService.findProductById(id);
-        LOGGER.info(LoggingUtils.withIP(request,"fetch " + response.toString() ));
+        LOGGER.info(LoggingUtils.withIP(request, "fetch " + response.toString()));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Product> saveProduct(@RequestBody @Valid Product products,HttpServletRequest request) {
+    public ResponseEntity<Product> saveProduct(@RequestBody @Valid Product products, HttpServletRequest request) {
         Product response = productService.saveProduct(products);
-        LOGGER.info(LoggingUtils.withIP(request,"saved " + response.toString() ));
+        LOGGER.info(LoggingUtils.withIP(request, "saved " + response.toString()));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public void updateProduct(@RequestBody @Valid Product product, @PathVariable Long id,HttpServletRequest request) {
+    public void updateProduct(@RequestBody @Valid Product product, @PathVariable Long id, HttpServletRequest request) {
         productService.updateOrCreate(product, id);
-        LOGGER.info(LoggingUtils.withIP(request,"update " + product.toString() ));
+        LOGGER.info(LoggingUtils.withIP(request, "update " + product.toString()));
     }
 
     /*
@@ -64,9 +64,9 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public void removeProduct(@PathVariable Long id,HttpServletRequest request) {
+    public void removeProduct(@PathVariable Long id, HttpServletRequest request) {
         Product product = productService.removeProduct(id);
-        LOGGER.info(LoggingUtils.withIP(request,"removed " + product.toString() ));
+        LOGGER.info(LoggingUtils.withIP(request, "removed " + product.toString()));
     }
 
 }

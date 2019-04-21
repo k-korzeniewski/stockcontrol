@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.Optional;
 
 
- class ProductCustomBindings {
+class ProductCustomBindings {
 
-     static void bind(QuerydslBindings bindings, QProduct root) {
+    static void bind(QuerydslBindings bindings, QProduct root) {
         bindings.bind(String.class).all((StringPath path, Collection<? extends String> values) -> {
             BooleanBuilder predicate = new BooleanBuilder();
             values.forEach(value -> {

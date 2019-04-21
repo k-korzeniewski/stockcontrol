@@ -2,9 +2,6 @@ package com.kamilkorzeniewski.stockcontrol.product;
 
 import com.google.common.collect.Lists;
 import com.querydsl.core.types.Predicate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -18,7 +15,7 @@ public class ProductService {
 
     private ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -35,7 +32,7 @@ public class ProductService {
         return productListMap;
     }
 
-    Product findProductById(Long id){
+    Product findProductById(Long id) {
         return productRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 

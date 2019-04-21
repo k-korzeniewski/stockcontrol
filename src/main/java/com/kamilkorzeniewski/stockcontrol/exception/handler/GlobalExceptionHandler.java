@@ -6,6 +6,7 @@ import com.kamilkorzeniewski.stockcontrol.exception.InvoiceLoadException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,7 +21,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Wrong json request",ex);
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Wrong json request", ex);
         return new ResponseEntity<>(apiError, apiError.getHttpStatus());
     }
 
@@ -44,5 +45,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
         return new ResponseEntity<>(apiError, apiError.getHttpStatus());
     }
+
+    @ResponseBody
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> authenticationException(Throwable ex) {
+        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getMessage(), ex);
+        return new ResponseEntity<>(apiError, apiError.getHttpStatus());
+    }
+
 
 }

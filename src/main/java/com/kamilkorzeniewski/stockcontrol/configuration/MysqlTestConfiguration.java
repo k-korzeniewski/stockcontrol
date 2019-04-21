@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 @Configuration
 public class MysqlTestConfiguration {
     @Value("${data.init-schema}")
-    private  String SAMPLE_DATA;
+    private String SAMPLE_DATA;
     @Value("${data.init-data}")
     private String SCHEMA;
 

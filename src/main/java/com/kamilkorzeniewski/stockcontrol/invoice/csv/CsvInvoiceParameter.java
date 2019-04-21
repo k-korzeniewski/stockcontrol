@@ -17,7 +17,8 @@ public class CsvInvoiceParameter {
     @JsonProperty("fieldMappingList")
     private Set<FieldMapping> fieldMappingList;
 
-    private CsvInvoiceParameter(){}
+    private CsvInvoiceParameter() {
+    }
 
     @JsonCreator
     public CsvInvoiceParameter(@NotNull @JsonProperty("path") String path, @NotNull @JsonProperty("rowOffset") int rowOffset,

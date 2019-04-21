@@ -11,12 +11,12 @@ public class FieldMapping {
     private int column;
 
     @JsonCreator
-    public FieldMapping(@JsonProperty("name") String name,@JsonProperty("column") int column) {
+    public FieldMapping(@JsonProperty("name") String name, @JsonProperty("column") int column) {
         this.name = name;
         this.column = column;
     }
 
-    boolean containColumn(int column){
+    boolean containColumn(int column) {
         return this.column == column;
     }
 
@@ -35,6 +35,6 @@ public class FieldMapping {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(name, column);
+        return java.util.Objects.hash(name, column);
     }
 }

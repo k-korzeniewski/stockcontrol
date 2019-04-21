@@ -52,7 +52,5 @@ public class CsvLoaderTest {
         Assertions.assertThat(resultProducts).isEqualTo(validTestProducts);
     }
 
-    
-
 
 }

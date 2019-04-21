@@ -2,7 +2,6 @@ package com.kamilkorzeniewski.stockcontrol.product;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.querydsl.core.annotations.PropertyType;
 import com.querydsl.core.annotations.QueryType;
 
@@ -15,52 +14,44 @@ import java.util.Objects;
 @Table(name = "products")
 public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY, value = "id")
-    private Long id;
-
+    @Transient
+    @QueryType(PropertyType.NUMERIC)
+    @JsonIgnore
+    public float priceFrom;
+    @Transient
+    @QueryType(PropertyType.NUMERIC)
+    @JsonIgnore
+    public float priceTo;
+    @Transient
+    @QueryType(PropertyType.NUMERIC)
+    @JsonIgnore
+    public int quantityFrom;
+    @Transient
+    @QueryType(PropertyType.NUMERIC)
+    @JsonIgnore
+    public int quantityTo;
     @NotNull
     @Column(name = "product_name")
     @JsonProperty("name")
     String name;
-
     @NotNull
     @Min(value = 0)
     @Column(name = "product_quantity")
     @JsonProperty("quantity")
     int quantity;
-
     @Column(name = "product_code")
     @JsonProperty("code")
     String code;
-
     @Column(name = "product_price")
     @Min(value = 0)
     @NotNull
     @JsonProperty("price")
     float price;
-
-    @Transient
-    @QueryType(PropertyType.NUMERIC)
-    @JsonIgnore
-    public float priceFrom;
-
-    @Transient
-    @QueryType(PropertyType.NUMERIC)
-    @JsonIgnore
-    public float priceTo;
-
-    @Transient
-    @QueryType(PropertyType.NUMERIC)
-    @JsonIgnore
-    public int quantityFrom;
-
-    @Transient
-    @QueryType(PropertyType.NUMERIC)
-    @JsonIgnore
-    public int quantityTo;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY, value = "id")
+    private Long id;
 
 
     public Product() {

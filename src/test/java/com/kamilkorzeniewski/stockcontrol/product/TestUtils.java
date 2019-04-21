@@ -11,7 +11,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Set;
 
-public class TestUtils {
+ class TestUtils {
 
     static Set<FieldMapping> prepareFieldMapping() {
         FieldMapping nameFiled = new FieldMapping("name", 0);
@@ -20,7 +20,8 @@ public class TestUtils {
         FieldMapping priceField = new FieldMapping("price", 3);
         return Set.of(nameFiled, codeField, quantityField, priceField);
     }
-    static void setUpTestCsvFile(String testFilePath,List<Product> products){
+
+    static void setUpTestCsvFile(String testFilePath, List<Product> products) {
         File file = new File(testFilePath);
         try {
             if (!file.createNewFile())

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class InvoiceLoadException extends RuntimeException {
 
-    public InvoiceLoadException(String message){
+    public InvoiceLoadException(String message) {
         super(message);
     }
 }

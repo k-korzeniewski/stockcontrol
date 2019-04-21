@@ -16,18 +16,19 @@ public class ApiError {
         timeStamp = LocalDateTime.now();
     }
 
-    ApiError(HttpStatus httpStatus, String message){
+    private ApiError(HttpStatus httpStatus, String message) {
         this();
         this.httpStatus = httpStatus;
         this.message = message;
     }
-     public ApiError(HttpStatus httpStatus, String message, Throwable exception) {
-        this(httpStatus,message);
+
+    public ApiError(HttpStatus httpStatus, String message, Throwable exception) {
+        this(httpStatus, message);
         this.extendedMessage = exception.getLocalizedMessage();
     }
 
     @JsonIgnore
-     public HttpStatus getHttpStatus() {
+    public HttpStatus getHttpStatus() {
         return httpStatus;
     }
 
@@ -35,10 +36,12 @@ public class ApiError {
     public String getMessage() {
         return message;
     }
+
     @JsonProperty("extendedMessage")
     public String getExtendedMessage() {
         return extendedMessage;
     }
+
     @JsonProperty("timeStamp")
     public LocalDateTime getTimeStamp() {
         return timeStamp;
